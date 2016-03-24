@@ -30,6 +30,11 @@ public class Doubles {
             INIT {
                 @Override
                 public State next(char c, ParseData parseData) {
+                    if (c == '-' || c == '+') {
+                        parseData.setSign(c);
+                        return NUMBER;
+                    }
+
                     int digit = c - '0';
                     if (digit <= 9 && digit >= 0) {
                         parseData.addDigit(digit);
@@ -65,13 +70,20 @@ public class Doubles {
 
         public static class ParseData {
             private int number;
+            private int sign = 1;
 
             public void addDigit(int digit) {
                 number = number * 10 + digit;
             }
 
             public int getNumber() {
-                return number;
+                return number * sign;
+            }
+
+            public void setSign(char sign) {
+                if (sign == '-') {
+                    this.sign = -1;
+                }
             }
         }
     }
